@@ -13,11 +13,9 @@ class Emitter {
 }
 
 class Events {
-    constructor(host, options) {
+    constructor(host) {
         this.host = host;
-
         new Emitter(host); // add simple event system
-
         host.on = (eventName, func) => {
             host.addEventListener(eventName, func);
             return host;
@@ -25,29 +23,14 @@ class Events {
     }
 
     trigger(event, detail, ev) {
-        if( typeof(event) === "object" && event instanceof Event ){
-            return this.host.dispatchEvent(event);    
-        }
+        if (typeof (event) === "object" && event instanceof Event)
+            return this.host.dispatchEvent(event);
 
-        if (!ev) {
+        if (!ev)
             ev = new Event(event, { bubbles: false, cancelable: true });
-        }
 
-        ev.detail = {            
-            ...(detail || {}),
-            host: this.host
-        };
+        ev.detail = { ...(detail || {}), host: this.host };
 
-        if (event === "fetch") {
-            return new Promise((resolve, reject) => {
-                ev.respondWith = promise => {
-                    promise.then(data => {
-                        resolve(data);
-                    })
-                }
-                this.host.dispatchEvent(ev);
-            });
-        }
         return this.host.dispatchEvent(ev);
     }
 }

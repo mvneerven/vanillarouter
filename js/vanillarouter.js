@@ -52,7 +52,8 @@ class VanillaRouter {
                 href += document.location.pathname;
             }
             document.addEventListener("click", this._onNavClick.bind(this));
-            window.onpopstate = this._triggerPopState.bind(this)
+            window.addEventListener("popstate", this._triggerPopState.bind(this));
+
             defer(() => this._tryNav(href));
         }
         console.log(`Listening (${this.options.type})...`);
