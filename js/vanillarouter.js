@@ -48,6 +48,9 @@ class VanillaRouter {
         }
         else {
             let href = document.location.origin;
+            if (this._findRoute(document.location.pathname)) {
+                href += document.location.pathname;
+            }
             document.addEventListener("click", this._onNavClick.bind(this));
             window.onpopstate = this._triggerPopState.bind(this)
             defer(() => this._tryNav(href));
