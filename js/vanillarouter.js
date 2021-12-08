@@ -60,15 +60,16 @@ class VanillaRouter {
     }
 
     _tryNav(href) {
-        const url = this._createUrl(href),
-            routePath = this._findRoute(url.pathname);
-
-        if (routePath && this.options.routes[routePath]) {
-            if (this.options.type === "history") {
-                window.history.pushState({ path: routePath }, routePath, url.origin + url.pathname);
+        const url = this._createUrl(href);
+        if (url.protocol.startsWith("http")) {
+            const routePath = this._findRoute(url.pathname);
+            if (routePath && this.options.routes[routePath]) {
+                if (this.options.type === "history") {
+                    window.history.pushState({ path: routePath }, routePath, url.origin + url.pathname);
+                }
+                this._triggerRouteChange(routePath, url);
+                return true;
             }
-            this._triggerRouteChange(routePath, url);
-            return true;
         }
     }
 
